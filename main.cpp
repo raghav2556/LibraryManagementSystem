@@ -6,7 +6,11 @@ int main() {
     int choice;
 
     while(true) {
-        cout << "Enter 1.Add 2.Display 3.Exit";
+        cout << "\n===== MENU =====\n";
+        cout << "1. Add\n";
+        cout << "2. Display\n";
+        cout << "3. Exit\n";
+        cout << "Enter choice: ";
         cin >> choice;
 
         if (choice == 1) addBook();

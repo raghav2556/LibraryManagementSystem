@@ -34,17 +34,17 @@ void addBook() {
     title.push_back(t);
     author.push_back(a);
     
-    cout << "Book added Successfully";
+    cout << "Book added Successfully" << endl;
 
 }
 
 
 void displayBooks() {
+    cout << "\nID  Title  Author  Available/Total\n";
     for (int i=0 ; i<BookId.size() ; i++) {
         cout << BookId[i] << " "
              << title[i] << " "
              << author[i] << " "
-             << quantity[i] << " "
-             << available[i] << " ";
+             << available[i] << "/" << quantity[i] << "\n";
     }
 }
