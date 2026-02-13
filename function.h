@@ -1,0 +1,2 @@
+void addBook();
+void displayBooks();
