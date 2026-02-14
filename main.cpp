@@ -11,7 +11,8 @@ int main() {
         cout << "2. Display\n";
         cout << "3. Issue\n";
         cout << "4. Return\n";
-        cout << "5. Exit\n";
+        cout << "5. Remove\n";
+        cout << "6. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
 
@@ -19,6 +20,9 @@ int main() {
         else if (choice == 2) displayBooks();
         else if (choice == 3) issueBook();
         else if (choice == 4) returnBook();
+        else if (choice == 5) removeBook();
+
+        
         else break;
 
     }

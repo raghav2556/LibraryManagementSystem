@@ -41,6 +41,10 @@ void addBook() {
 
 
 void displayBooks() {
+    if (BookId.empty()) {
+        cout << "No Books available to display!!\n";
+        return;
+    }
     cout << "\nID  Title  Author  Available/Total\n";
     for (int i=0 ; i<BookId.size() ; i++) {
         cout << BookId[i] << " "
@@ -123,3 +127,26 @@ void returnBook() {
 
     cout << "This Student did not issued this Book!!\n";
 }
+
+void removeBook() {
+    int id;
+
+    cout << "Enter Book ID to be removed: ";
+    cin >> id;
+
+    for (int i=0 ; i<BookId.size() ; i++) {
+        if (BookId[i] == id) {
+            BookId.erase(BookId.begin() + i);
+            title.erase(title.begin() + i);
+            author.erase(author.begin() + i);
+            available.erase(available.begin() + i);
+            quantity.erase(quantity.begin() + i);
+
+            cout << "Book removed successfully!!\n";
+            return;
+           }
+        }
+
+        cout << "Book not found!!\n";
+    }
+   
