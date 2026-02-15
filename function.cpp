@@ -28,6 +28,16 @@ void addBook() {
     cout << "Enter Quantity: ";
     cin >> qty;
 
+    for (int i=0 ; i<BookId.size() ; i++) {
+        if (BookId[i] == id) {
+            quantity[i] += qty;
+            available[i] += qty;
+            
+            cout << "Book already Present , Quantity Updated!!\n";
+            return;
+        }
+    }
+
 
     BookId.push_back(id);
     quantity.push_back(qty);
@@ -69,6 +79,12 @@ void issueBook() {
 
     for (int i=0 ; i<BookId.size() ; i++) {
         if (BookId[i] == id) {
+            for (string s : issued[id]) {
+                if (s == student) {
+                    cout << "Student already has this book!!\n";
+                    return;
+                }
+            }
             if (available[i] > 0) {
                 issued[id].push_back(student);
                 available[i]--;
@@ -96,6 +112,20 @@ void returnBook() {
     cin.ignore();
     cout << "Enter Student Name: ";
     getline(cin, student);
+
+    bool found = false;
+
+    for (int i=0; i<BookId.size() ; i++) {
+        if (id == BookId[i]) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Book is not present in Library!!\n";
+        return;
+    }
 
 
     if (issued.count(id) == 0) {
@@ -136,6 +166,11 @@ void removeBook() {
 
     for (int i=0 ; i<BookId.size() ; i++) {
         if (BookId[i] == id) {
+
+            if (available[i] != quantity[i]) {
+                cout << "Some copies are still issued , Cannot be removed!!\n";
+                return;
+            }
             BookId.erase(BookId.begin() + i);
             title.erase(title.begin() + i);
             author.erase(author.begin() + i);
@@ -149,4 +184,40 @@ void removeBook() {
 
         cout << "Book not found!!\n";
     }
+
+
+void showissuedBook() {
+    int id;
+
+    cout << "Enter Book ID to be checked: ";
+    cin >> id;
+
+    if (issued.count(id) == 0) {
+        cout << "This Book was not issued!!\n";
+        return;
+    }
+    
+    bool found = false;
+
+    for (int i=0; i<BookId.size() ; i++) {
+        if (id == BookId[i]) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Book is not present in Library!!\n";
+        return;
+    }
+
+
+    cout << "Book is issued to: ";
+    for (int i=0 ; i<issued[id].size() ; i++) {
+        cout << issued[id][i];
+        if (i != issued[id].size()-1) {
+            cout << ", ";
+        }
+    }
+}
    
