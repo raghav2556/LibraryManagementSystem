@@ -8,6 +8,7 @@ vector<int> available;
 vector<string> title;
 vector<string> author;
 unordered_map<int , vector<string>> issued;
+unordered_map<int , int> bookid;
 
 
 void addBook() {
@@ -28,18 +29,17 @@ void addBook() {
     cout << "Enter Quantity: ";
     cin >> qty;
 
-    for (int i=0 ; i<BookId.size() ; i++) {
-        if (BookId[i] == id) {
-            quantity[i] += qty;
-            available[i] += qty;
-            
-            cout << "Book already Present , Quantity Updated!!\n";
-            return;
-        }
+    if (bookid.count(id)) {
+        available[bookid[id]] += qty;
+        quantity[bookid[id]] += qty;
+
+        cout << "Books is already Present , Quantity Upated!!\n";
+        return;
     }
 
 
     BookId.push_back(id);
+    bookid[id] = BookId.size() - 1;
     quantity.push_back(qty);
     available.push_back(qty);
     title.push_back(t);
@@ -77,17 +77,16 @@ void issueBook() {
     getline(cin , student);
 
 
-    for (int i=0 ; i<BookId.size() ; i++) {
-        if (BookId[i] == id) {
+   if (bookid.count(id)) {
             for (string s : issued[id]) {
                 if (s == student) {
                     cout << "Student already has this book!!\n";
                     return;
                 }
             }
-            if (available[i] > 0) {
+            if (available[bookid[id]] > 0) {
                 issued[id].push_back(student);
-                available[i]--;
+                available[bookid[id]]--;
 
                 cout << "Book issued successfully!!\n";
                 
@@ -96,7 +95,7 @@ void issueBook() {
                 cout << "Book not available!!\n";
             }
             return;
-        }
+        
     }
     cout << "Book not found!!\n";
 }
@@ -115,12 +114,7 @@ void returnBook() {
 
     bool found = false;
 
-    for (int i=0; i<BookId.size() ; i++) {
-        if (id == BookId[i]) {
-            found = true;
-            break;
-        }
-    }
+    if (bookid.count(id)) found = true;
 
     if (!found) {
         cout << "Book is not present in Library!!\n";
@@ -138,12 +132,7 @@ void returnBook() {
         if (issued[id][i] == student) {
             issued[id].erase(issued[id].begin() + i);
 
-            for (int j=0 ; j<BookId.size() ; j++) {
-                if (BookId[j] == id) {
-                    available[j]++;
-                    break;
-                }
-            }
+            available[bookid[id]]++;
 
             cout << "Book returned successfully!!\n";
 
@@ -164,23 +153,30 @@ void removeBook() {
     cout << "Enter Book ID to be removed: ";
     cin >> id;
 
-    for (int i=0 ; i<BookId.size() ; i++) {
-        if (BookId[i] == id) {
-
-            if (available[i] != quantity[i]) {
+    
+        if (bookid.count(id)) {
+            int idx = bookid[id];
+          
+            if (available[idx] != quantity[idx]) {
                 cout << "Some copies are still issued , Cannot be removed!!\n";
                 return;
             }
-            BookId.erase(BookId.begin() + i);
-            title.erase(title.begin() + i);
-            author.erase(author.begin() + i);
-            available.erase(available.begin() + i);
-            quantity.erase(quantity.begin() + i);
+            BookId.erase(BookId.begin() + idx);
+            title.erase(title.begin() + idx);
+            author.erase(author.begin() + idx);
+            available.erase(available.begin() + idx);
+            quantity.erase(quantity.begin() + idx);
+
+            bookid.erase(id);
+
+            for (int i = idx; i < BookId.size(); i++) {
+                 bookid[BookId[i]] = i;
+            }
 
             cout << "Book removed successfully!!\n";
             return;
            }
-        }
+        
 
         cout << "Book not found!!\n";
     }
@@ -199,12 +195,7 @@ void showissuedBook() {
     
     bool found = false;
 
-    for (int i=0; i<BookId.size() ; i++) {
-        if (id == BookId[i]) {
-            found = true;
-            break;
-        }
-    }
+    if (bookid.count(id)) found = true;
 
     if (!found) {
         cout << "Book is not present in Library!!\n";
